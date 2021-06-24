@@ -10,7 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "asn1.js": "^5.4.1",
     "core-js": "^3.9.1",
+    "crypto-js": "^4.0.0",
+    "elliptic": "^6.5.4",
     "nuxt": "^2.15.3"
   },
   "devDependencies": {

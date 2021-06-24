@@ -12,7 +12,7 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-btn class="primary">生成公私钥</v-btn>
+                <v-btn class="primary" @click="generatePair()">生成公私钥</v-btn>
               </v-col>
             </v-row>
             <v-row>
@@ -21,6 +21,7 @@
             <v-row>
               <v-col cols="12">
                 <v-textarea
+                  v-model="generated_pri"
                   solo
                   disabled
                   name="input-7-4"
@@ -34,6 +35,7 @@
             <v-row>
               <v-col cols="12">
                 <v-textarea
+                  v-model="generated_pub"
                   solo
                   disabled
                   name="input-7-4"
@@ -115,11 +117,65 @@
 <script>
 import Logo from '~/components/Logo.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import * as crypto from 'crypto-js'
+import * as elliptic from 'elliptic'
+import * as asn from 'asn1.js'
 
 export default {
   components: {
     Logo,
     VuetifyLogo
+  },
+  data() {
+    return {
+      generated_pub: '',
+      generated_pri: '',
+    }
+  },
+  methods: {
+    generatePair() {
+      const ec = new elliptic.ec('secp256k1')
+      const keyPair = ec.genKeyPair();
+      var CURVE = [1, 3, 132, 0, 10] // :secp256k1
+
+      var ECPublicKey = asn.define("PublicKey", function() {
+        this.seq().obj(
+          this.key("algorithm").seq().obj(
+            this.key("id").objid(),
+            this.key("curve").objid()
+          ),
+          this.key("pub").bitstr()
+        );
+      });
+
+      var ECPrivateKey = asn.define("ECPrivateKey", function() {
+        this.seq().obj(
+          this.key('version').int(),
+          this.key('privateKey').octstr(),
+          this.key('parameters').explicit(0).objid().optional(),
+          this.key('publicKey').explicit(1).bitstr().optional()
+        );
+      });
+
+      this.generated_pub = ECPublicKey.encode({
+        algorithm: {
+          // :id-ecPublicKey
+          id: [1, 2, 840, 10045, 2, 1],
+          curve: CURVE,
+        },
+        pub: {
+          unused: 0,
+          data: new Buffer(keyPair.getPublic("array")),
+        },
+      }, "pem", {label: "PUBLIC KEY"});
+
+      this.generated_pri = ECPrivateKey.encode({
+        version: 1,
+        parameters: CURVE,
+        publicKey: {data: new Buffer(keyPair.getPublic("array"))},
+        privateKey: new Buffer(keyPair.getPrivate().toArray())
+      }, "pem", {label: "EC PRIVATE KEY"});
+    }
   }
 }
 </script>
