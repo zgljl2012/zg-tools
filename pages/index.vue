@@ -120,6 +120,28 @@ import VuetifyLogo from '~/components/VuetifyLogo.vue'
 import * as crypto from 'crypto-js'
 import * as elliptic from 'elliptic'
 import * as asn from 'asn1.js'
+import * as BN from 'bn.js'
+
+var CURVE = [1, 3, 132, 0, 10] // :secp256k1
+
+var ECPublicKey = asn.define("PublicKey", function() {
+  this.seq().obj(
+    this.key("algorithm").seq().obj(
+      this.key("id").objid(),
+      this.key("curve").objid()
+    ),
+    this.key("pub").bitstr()
+  );
+});
+
+var ECPrivateKey = asn.define("ECPrivateKey", function() {
+  this.seq().obj(
+    this.key('version').int(),
+    this.key('privateKey').octstr(),
+    this.key('parameters').explicit(0).objid().optional(),
+    this.key('publicKey').explicit(1).bitstr().optional()
+  );
+});
 
 export default {
   components: {
@@ -136,26 +158,6 @@ export default {
     generatePair() {
       const ec = new elliptic.ec('secp256k1')
       const keyPair = ec.genKeyPair();
-      var CURVE = [1, 3, 132, 0, 10] // :secp256k1
-
-      var ECPublicKey = asn.define("PublicKey", function() {
-        this.seq().obj(
-          this.key("algorithm").seq().obj(
-            this.key("id").objid(),
-            this.key("curve").objid()
-          ),
-          this.key("pub").bitstr()
-        );
-      });
-
-      var ECPrivateKey = asn.define("ECPrivateKey", function() {
-        this.seq().obj(
-          this.key('version').int(),
-          this.key('privateKey').octstr(),
-          this.key('parameters').explicit(0).objid().optional(),
-          this.key('publicKey').explicit(1).bitstr().optional()
-        );
-      });
 
       this.generated_pub = ECPublicKey.encode({
         algorithm: {
@@ -175,6 +177,11 @@ export default {
         publicKey: {data: new Buffer(keyPair.getPublic("array"))},
         privateKey: new Buffer(keyPair.getPrivate().toArray())
       }, "pem", {label: "EC PRIVATE KEY"});
+    },
+    pem2privateKey(pem) {
+      // 读取 PEM 转化为私钥
+      let pri = ECPrivateKey.decode(pem, 'pem', {label: "EC PRIVATE KEY"})
+      return new BN(pri.privateKey)
     }
   }
 }
