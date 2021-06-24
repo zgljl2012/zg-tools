@@ -2,74 +2,110 @@
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
       <div class="text-center">
-        <logo />
-        <vuetify-logo />
+        
       </div>
       <v-card>
         <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
+          ECC椭圆曲线算法在线密码生成
         </v-card-title>
         <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-btn class="primary">生成公私钥</v-btn>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">ECC 私钥</v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  solo
+                  disabled
+                  name="input-7-4"
+                  label="私钥"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">ECC 公钥</v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  solo
+                  disabled
+                  name="input-7-4"
+                  label="公钥"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12"></v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+      <v-card class="mt-8">
+        <v-card-title class="headline">
+          ECC椭圆曲线算法在线加密验证
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">ECC 私钥</v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  solo
+                  name="input-7-4"
+                  label="请输入 ECC 私钥"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">待加密明文</v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  solo
+                  name="input-7-4"
+                  label="请输入待加密明文"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="3">
+                <v-btn color="primary" nuxt>加密</v-btn>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">密文</v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  solo
+                  disabled
+                  name="input-7-4"
+                  label="密文"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
+          <!-- <v-btn
             color="primary"
             nuxt
             to="/inspire"
           >
             Continue
-          </v-btn>
+          </v-btn> -->
         </v-card-actions>
       </v-card>
     </v-col>
